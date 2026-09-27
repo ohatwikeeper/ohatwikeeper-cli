@@ -6,6 +6,14 @@ truecolor(256色の端末でも可)で描画し、アバターや投稿画像の
 
 ## インストール
 
+npm(Linux / macOS / Windows):
+
+```bash
+npm i -g @lapius/ohatwikeeper-cli
+```
+
+OS/CPUに合ったビルド済みバイナリが入る(Linux/macOSでは初回の起動時にnodeのシムがネイティブバイナリに置き換わり、以後はnodeを経由しない)。更新は同じコマンドで行う。
+
 Goがある場合:
 
 ```bash
@@ -84,3 +92,5 @@ ohax url awards 5axwn       # ブラウザ用URLを表示するだけ
 ## 配布物のビルド
 
 `./build.sh`で全OS/CPU向けにクロスコンパイルし、ohatwikeeper.comの`cli/dl/`(と`cli/install.sh`)に配置する。`OHAX_DIST_DIR=dist ./build.sh`なら手元に出すだけ。
+
+npm版は`v*`タグをpushするとGitHub Actions(`.github/workflows/release.yml`)が`npm/build.mjs`でビルドしてnpmに公開し、GitHub Releaseにもバイナリを添付する(npmのTrusted Publisherで認証するのでトークンは不要)。手元での確認は`node npm/build.mjs 0.0.0-dev --pack`。
