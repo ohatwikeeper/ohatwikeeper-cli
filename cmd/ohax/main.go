@@ -109,6 +109,7 @@ func run(args []string) int {
 			return 0
 		case a == "-v" || a == "--version":
 			fmt.Println("ohax", version)
+			fmt.Print(lapiusFooter())
 			return 0
 		case a == "--clear": // ohax use --clear
 			pos = append(pos, a)
@@ -136,6 +137,7 @@ func run(args []string) int {
 		return 0
 	case "version":
 		fmt.Println("ohax", version)
+		fmt.Print(lapiusFooter())
 		return 0
 	case "use":
 		return cmdUse(pos[1:])
@@ -424,4 +426,5 @@ func usage(w io.Writer) {
 		"",
 	}
 	fmt.Fprintln(w, strings.Join(lines, "\n"))
+	fmt.Fprint(w, lapiusFooter())
 }
