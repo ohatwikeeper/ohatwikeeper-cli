@@ -33,21 +33,21 @@ OS/CPUに合ったビルド済みバイナリを`~/.local/bin/ohax`に置く(`OH
 ## 使い方
 
 ```bash
-ohax 5axwn                  # プロフィール(アバター・統計・連続投稿・直近30日・最近の投稿)
-ohax graph 5axwn            # 推移グラフ(いいね・インプレッション・リポスト・返信)
-ohax grass 5axwn            # 投稿グラス(日ごとの投稿カレンダー)
-ohax awards 5axwn           # アワードと次の目標
-ohax gallery 5axwn          # 画像ギャラリー(サムネイル付き)
-ohax all 5axwn              # 上の5つをまとめて表示
-ohax rss 5axwn              # RSSフィード(XML)
+ohax tiskf                  # プロフィール(アバター・統計・連続投稿・直近30日・最近の投稿)
+ohax graph tiskf            # 推移グラフ(いいね・インプレッション・リポスト・返信)
+ohax grass tiskf            # 投稿グラス(日ごとの投稿カレンダー)
+ohax awards tiskf           # アワードと次の目標
+ohax gallery tiskf          # 画像ギャラリー(サムネイル付き)
+ohax all tiskf              # 上の5つをまとめて表示
+ohax rss tiskf              # RSSフィード(XML)
 ohax                        # ヘルプ
 ```
 
 ユーザーの指定には、public_uuidのほか共有URLもそのまま渡せる。URLにページ名が含まれていればそのページを表示する。
 
 ```bash
-ohax https://5axwn.ohax.pw/graph
-ohax ohatwikeeper.com/5axwn/awards
+ohax https://tiskf.ohax.pw/graph
+ohax ohatwikeeper.com/tiskf/awards
 ```
 
 ### オプション
@@ -63,7 +63,7 @@ ohax --width 80 awards      # 表示幅を指定
 ### 既定ユーザー
 
 ```bash
-ohax use 5axwn              # 保存(存在確認してから保存する)
+ohax use tiskf              # 保存(存在確認してから保存する)
 ohax profile                # 以後はユーザー省略でOK
 ohax grass
 ohax whoami                 # 保存中のユーザー
@@ -76,7 +76,7 @@ ohax use --clear            # 削除
 
 ```bash
 ohax open graph             # 推移グラフをブラウザで開く
-ohax url awards 5axwn       # ブラウザ用URLを表示するだけ
+ohax url awards tiskf       # ブラウザ用URLを表示するだけ
 ```
 
 ### 色

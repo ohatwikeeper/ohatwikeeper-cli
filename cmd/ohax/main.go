@@ -261,8 +261,8 @@ func withTarget(rest []string, section string, fn func(uuid, section string) int
 	return fn(uuid, section)
 }
 
-// parseTarget は "5axwn" / "https://5axwn.ohax.pw/graph" / "ohax.pw/5axwn" /
-// "ohatwikeeper.com/5axwn/awards" / "5axwn.ohatwikeeper.com" を受け付ける。
+// parseTarget は "tiskf" / "https://tiskf.ohax.pw/graph" / "ohax.pw/tiskf" /
+// "ohatwikeeper.com/tiskf/awards" / "tiskf.ohatwikeeper.com" を受け付ける。
 func parseTarget(s string) (uuid, section string, err error) {
 	s = strings.TrimSpace(s)
 	if uuidRe.MatchString(s) {
@@ -418,8 +418,8 @@ func usage(w io.Writer) {
 		"   " + c("    --color") + "                 パイプ先でも色付きで出力",
 		"   " + c("-v, --version") + "               バージョン",
 		"",
-		" " + dim("<user> には public_uuid(例: 5axwn)か、共有URLをそのまま渡せます:"),
-		" " + dim("  https://5axwn.ohax.pw/graph ・ ohatwikeeper.com/5axwn/awards"),
+		" " + dim("<user> には public_uuid(例: tiskf)か、共有URLをそのまま渡せます:"),
+		" " + dim("  https://tiskf.ohax.pw/graph ・ ohatwikeeper.com/tiskf/awards"),
 		"",
 		" " + dim("環境変数: OHAX_UUID(既定ユーザー) / NO_COLOR / OHAX_COLOR=truecolor|256|none"),
 		" " + dim("詳しくは https://ohatwikeeper.com/cli"),
