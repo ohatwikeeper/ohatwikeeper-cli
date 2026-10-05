@@ -2,14 +2,14 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 )
 
 type config struct {
-	UUID string `json:"uuid"`
+	UUID   string `json:"uuid"`
+	APIKey string `json:"api_key,omitempty"`
 }
 
 func configPath() (string, error) {
@@ -56,53 +56,8 @@ func defaultUUID() string {
 	return loadConfig().UUID
 }
 
-func cmdUse(args []string) int {
-	if len(args) != 1 {
-		fmt.Fprintln(os.Stderr, "使い方: ohax use <public_uuid または URL>  /  ohax use --clear")
-		return 2
-	}
-	if args[0] == "--clear" {
-		p, err := configPath()
-		if err == nil {
-			err = os.Remove(p)
-		}
-		if err != nil && !errors.Is(err, os.ErrNotExist) {
-			fmt.Fprintf(os.Stderr, "%s %v\n", paint(cRed, "✗"), err)
-			return 1
-		}
-		fmt.Println(paint(cGreen, "✓") + " 既定ユーザーを削除しました")
-		return 0
-	}
-	uuid, _, err := parseTarget(args[0])
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s %v\n", paint(cRed, "✗"), err)
-		return 2
-	}
-	// 存在しないユーザーを保存しないよう、プロフィールが取れるか確かめてから保存する
-	u, err := getUser(uuid)
-	if err != nil {
-		return fail(err, uuid)
-	}
-	p, err := saveConfig(config{UUID: uuid})
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s 設定を保存できませんでした: %v\n", paint(cRed, "✗"), err)
-		return 1
-	}
-	fmt.Printf("%s 既定ユーザーを %s %s にしました\n", paint(cGreen, "✓"), bold(u.name()), dim("("+uuid+")"))
-	fmt.Println(dim("  保存先: " + p))
-	fmt.Println(dim("  これからは ") + paint(cSky, "ohax profile") + dim(" や ") + paint(cSky, "ohax grass") + dim(" のようにUUIDを省略できます"))
-	return 0
-}
-
-func cmdWhoami() int {
-	if v := os.Getenv("OHAX_UUID"); v != "" {
-		fmt.Printf("%s %s\n", bold(defaultUUID()), dim("(環境変数 OHAX_UUID)"))
-		return 0
-	}
-	if u := loadConfig().UUID; u != "" {
-		fmt.Println(u)
-		return 0
-	}
-	fmt.Fprintln(os.Stderr, dim("既定ユーザーは未設定です(")+paint(cSky, "ohax use <public_uuid>")+dim(" で設定できます)"))
-	return 1
+func cmdUse() int {
+	fmt.Fprintln(os.Stderr, paint(cRed, "✗")+" ohax use は廃止されました。ログインしたアカウントが既定ユーザーになります。")
+	fmt.Fprintln(os.Stderr, dim("  ")+paint(cSky, "ohax login")+dim(" でログインしてください(Lapount)"))
+	return 2
 }

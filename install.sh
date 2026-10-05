@@ -66,6 +66,6 @@ esac
 
 printf "\n%s🎉 ohax のインストールが完了しました！%s\n\n" "$BOLD" "$RESET"
 printf "次のステップ:\n"
-printf "  %s1.%s %sohax use <public_uuid>%s  既定ユーザーを保存\n" "$BOLD" "$RESET" "$CYAN" "$RESET"
+printf "  %s1.%s %sohax login%s              ★推奨: Lapount でログイン(自分の記録の閲覧・登録・削除ができます)\n" "$BOLD" "$RESET" "$CYAN" "$RESET"
 printf "  %s2.%s %sohax all%s                プロフィール〜ギャラリーをまとめて表示\n" "$BOLD" "$RESET" "$CYAN" "$RESET"
 printf "\n%s詳細:%s https://ohatwikeeper.com/cli\n" "$DIM" "$RESET"

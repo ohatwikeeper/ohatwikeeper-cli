@@ -111,8 +111,6 @@ func run(args []string) int {
 			fmt.Println("ohax", version)
 			fmt.Print(lapiusFooter())
 			return 0
-		case a == "--clear": // ohax use --clear
-			pos = append(pos, a)
 		case a == "--":
 			pos = append(pos, args[i+1:]...)
 			i = len(args)
@@ -140,9 +138,19 @@ func run(args []string) int {
 		fmt.Print(lapiusFooter())
 		return 0
 	case "use":
-		return cmdUse(pos[1:])
+		return cmdUse()
+	case "login":
+		return cmdLogin(pos[1:])
+	case "logout":
+		return cmdLogout()
 	case "whoami":
 		return cmdWhoami()
+	case "add":
+		return cmdAdd(pos[1:])
+	case "rm", "remove":
+		return cmdRemove(pos[1:])
+	case "list", "ls":
+		return cmdList()
 	case "all":
 		return withTarget(pos[1:], "", func(uuid, _ string) int {
 			v := newView(uuid, opts)
@@ -254,7 +262,7 @@ func withTarget(rest []string, section string, fn func(uuid, section string) int
 		uuid = defaultUUID()
 		if uuid == "" {
 			fmt.Fprintf(os.Stderr, "%s ユーザーが指定されていません。\n", paint(cRed, "✗"))
-			fmt.Fprintln(os.Stderr, dim("  ohax <public_uuid> のように指定するか、ohax use <public_uuid> で既定ユーザーを保存してください。"))
+			fmt.Fprintln(os.Stderr, dim("  ohax <public_uuid> のように指定するか、ohax login でログインしてください。"))
 			return 2
 		}
 	}
@@ -399,10 +407,13 @@ func usage(w io.Writer) {
 		"   " + c("ohax profile [<user>]") + "       プロフィール(既定ユーザーならこちら)",
 		"   " + c("ohax rss     [<user>]") + "       RSSフィード(XML)",
 		"",
-		h(" 既定ユーザー"),
-		"   " + c("ohax use <user>") + "             保存する(以後<user>を省略できる)",
-		"   " + c("ohax use --clear") + "            削除する",
-		"   " + c("ohax whoami") + "                 保存中のユーザーを表示",
+		h(" アカウント(Lapount でログイン)"),
+		"   " + c("ohax login") + "                 Lapount でログイン(ブラウザで承認)",
+		"   " + c("ohax logout") + "                ログアウト(保存したログイン情報を削除)",
+		"   " + c("ohax whoami") + "                ログイン中のアカウントを表示",
+		"   " + c("ohax list") + "                  自分の記録一覧(非公開含む)",
+		"   " + c("ohax add <tweet_url>...") + "    おはツイを登録",
+		"   " + c("ohax rm <id|url>...") + "        おはツイを削除",
 		"",
 		h(" ブラウザ"),
 		"   " + c("ohax open [<page>] [<user>]") + " ブラウザで開く(例: ohax open graph)",
@@ -421,7 +432,7 @@ func usage(w io.Writer) {
 		" " + dim("<user> には public_uuid(例: tiskf)か、共有URLをそのまま渡せます:"),
 		" " + dim("  https://tiskf.ohax.pw/graph ・ ohatwikeeper.com/tiskf/awards"),
 		"",
-		" " + dim("環境変数: OHAX_UUID(既定ユーザー) / NO_COLOR / OHAX_COLOR=truecolor|256|none"),
+		" " + dim("環境変数: OHAX_UUID(既定ユーザーの上書き) / NO_COLOR / OHAX_COLOR=truecolor|256|none"),
 		" " + dim("詳しくは https://ohatwikeeper.com/cli"),
 		"",
 	}

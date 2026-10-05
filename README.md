@@ -60,17 +60,23 @@ ohax gallery --no-images    # サムネイルなしの一覧
 ohax --width 80 awards      # 表示幅を指定
 ```
 
-### 既定ユーザー
+### ログイン(Lapount・推奨)
+
+CLIは**Lapountでログインするだけ**で使えます(APIキーは不要です。APIキーはブラウザ拡張で使います)。
 
 ```bash
-ohax use tiskf              # 保存(存在確認してから保存する)
+ohax login                  # ブラウザでLapountを承認
+ohax whoami                 # ログイン中のアカウント
+ohax list                   # 自分の記録(非公開を含む)
+ohax add <ツイートURL>...   # おはツイを登録
+ohax rm <ID|ツイートURL>... # おはツイを削除
 ohax profile                # 以後はユーザー省略でOK
-ohax grass
-ohax whoami                 # 保存中のユーザー
-ohax use --clear            # 削除
+ohax logout                 # ログアウト
 ```
 
-保存先は`$XDG_CONFIG_HOME/ohax/config.json`(macOSは`~/Library/Application Support/ohax/`、Windowsは`%AppData%\ohax\`)。環境変数`OHAX_UUID`があればそちらが優先される。
+事前にXでログインし、設定からLapountを連携しておく必要があります(新規登録はXのみ)。`ohax use` は廃止されました。
+
+保存先は`$XDG_CONFIG_HOME/ohax/config.json`(macOSは`~/Library/Application Support/ohax/`、Windowsは`%AppData%\ohax\`)。
 
 ### ブラウザ
 
