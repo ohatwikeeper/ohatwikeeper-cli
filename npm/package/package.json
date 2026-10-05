@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "description": "おはツイKeeper 公式 CLI（ohax）",
   "keywords": ["cli", "ohatwikeeper", "terminal"],
-  "homepage": "https://github.com/Lapius7/ohatwikeeper-cli",
+  "homepage": "https://github.com/ohatwikeeper/ohatwikeeper-cli",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lapius7/ohatwikeeper-cli.git"
+    "url": "git+https://github.com/ohatwikeeper/ohatwikeeper-cli.git"
   },
   "license": "MIT",
   "bin": {
