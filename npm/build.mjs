@@ -92,7 +92,15 @@ if (flags.includes('--publish')) {
       console.log(`==> 公開済みなので飛ばす: ${name}@${version}`);
       continue;
     }
-    run('npm', ['publish', '--access', 'public', ...extra], { cwd: dir });
+    try {
+      const out = execFileSync('npm', ['publish', '--access', 'public', ...extra], { cwd: dir, stdio: ['ignore', 'pipe', 'pipe'] });
+      process.stdout.write(out);
+    } catch (e) {
+      const msg = `${e.stdout ?? ''}${e.stderr ?? ''}`;
+      // レジストリの反映遅れで view が外れても、公開済みなら続行する
+      if (!/previously published versions/.test(msg)) { process.stderr.write(msg); throw e; }
+      console.log(`skip (公開済み): ${name}@${version}`);
+    }
   }
 } else if (flags.includes('--pack')) {
   for (const dir of dirs) run('npm', ['pack', '--pack-destination', out], { cwd: dir });
