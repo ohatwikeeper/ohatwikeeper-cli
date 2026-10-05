@@ -17,10 +17,39 @@ func apiKey() string {
 	return loadConfig().APIKey
 }
 
+// card は角丸の枠で囲んだ表示(title は枠の上に表示)
+func card(col RGB, title string, rows ...string) {
+	w := strWidth(title) + 4
+	for _, r := range rows {
+		if n := strWidth(r); n > w {
+			w = n
+		}
+	}
+	w += 2
+	line := strings.Repeat("─", w)
+	fmt.Println(paint(col, "╭─ ") + boldPaint(col, title) + paint(col, " "+strings.Repeat("─", max(w-strWidth(title)-3, 1))+"╮"))
+	for _, r := range rows {
+		fmt.Println(paint(col, "│") + " " + padRight(r, w-1) + paint(col, "│"))
+	}
+	fmt.Println(paint(col, "╰"+line+"╯"))
+}
+
+func accountRows(m meInfo) []string {
+	return []string{
+		bold(m.label()) + dim("  "+m.DisplayName),
+		dim("ID  ") + m.PublicUUID,
+		dim("画面 ") + baseURL() + "/" + m.PublicUUID,
+	}
+}
+
+func notLoggedIn() {
+	fmt.Fprintln(os.Stderr, paint(cRed, "✗")+" ログインが必要です。 "+paint(cSky, "ohax login")+dim(" (Lapount でログインします)"))
+}
+
 func requireLogin() (string, bool) {
 	k := apiKey()
 	if k == "" {
-		fmt.Fprintln(os.Stderr, paint(cRed, "✗")+" ログインが必要です。 "+paint(cSky, "ohax login")+dim(" (Lapount でログインします)"))
+		notLoggedIn()
 	}
 	return k, k != ""
 }
@@ -85,11 +114,18 @@ func getMe(key string) (meInfo, error) {
 	return m, err
 }
 
-func cmdLogin(args []string) int {
-	fmt.Fprintln(os.Stderr, bold("おはツイKeeperにログイン(Lapount)"))
+func cmdLogin(_ []string) int {
+	if k := apiKey(); k != "" {
+		if m, err := getMe(k); err == nil {
+			card(cGreen, "ログイン済み", accountRows(m)...)
+			fmt.Println()
+			fmt.Println(dim("  アカウントを変えるには、先に ") + paint(cSky, "ohax logout") + dim(" してから ") + paint(cSky, "ohax login") + dim(" を実行してください"))
+			return 0
+		}
+	}
 	key, err := lapountLogin()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s %v\n", paint(cRed, "✗"), err)
+		fmt.Fprintf(os.Stderr, "\n%s %v\n", paint(cRed, "✗"), err)
 		return 1
 	}
 	m, err := getMe(key)
@@ -97,13 +133,14 @@ func cmdLogin(args []string) int {
 		fmt.Fprintf(os.Stderr, "%s ログインに失敗しました: %v\n", paint(cRed, "✗"), err)
 		return 1
 	}
-	p, err := saveConfig(config{UUID: m.PublicUUID, APIKey: key})
-	if err != nil {
+	if _, err := saveConfig(config{UUID: m.PublicUUID, APIKey: key}); err != nil {
 		fmt.Fprintf(os.Stderr, "%s 設定を保存できませんでした: %v\n", paint(cRed, "✗"), err)
 		return 1
 	}
-	fmt.Printf("%s %s としてログインしました %s\n", paint(cGreen, "✓"), bold(m.label()), dim("("+m.PublicUUID+")"))
-	fmt.Println(dim("  保存先: " + p))
+	fmt.Println()
+	card(cGreen, "ログインしました", accountRows(m)...)
+	fmt.Println()
+	fmt.Println(dim("  使ってみる: ") + paint(cSky, "ohax list") + dim(" / ") + paint(cSky, "ohax add <ツイートURL>") + dim(" / ") + paint(cSky, "ohax all"))
 	return 0
 }
 
@@ -119,8 +156,12 @@ func lapountLogin() (string, error) {
 	if _, err := call(http.MethodPost, baseURL()+"/app-api/auth/cli/lapount/start", "", map[string]string{}, &st); err != nil {
 		return "", fmt.Errorf("Lapountログインを開始できませんでした: %w", err)
 	}
-	fmt.Fprintln(os.Stderr, "ブラウザで次のURLを開き、コード "+bold(st.UserCode)+" を承認してください:")
-	fmt.Fprintln(os.Stderr, "  "+paint(cSky, st.VerificationURL))
+	fmt.Fprintln(os.Stderr)
+	fmt.Fprintln(os.Stderr, bold("Lapount でログイン"))
+	fmt.Fprintln(os.Stderr, "  1. ブラウザで次のURLを開く")
+	fmt.Fprintln(os.Stderr, "     "+paint(cSky, st.VerificationURL))
+	fmt.Fprintln(os.Stderr, "  2. コード "+boldPaint(cGreen, st.UserCode)+" を確認して「承認」")
+	fmt.Fprintln(os.Stderr, dim("  承認を待っています…(約"+fmt.Sprint(max(st.ExpiresIn, 60)/60)+"分で期限切れ)"))
 	iv := time.Duration(max(st.Interval, 2)) * time.Second
 	deadline := time.Now().Add(time.Duration(max(st.ExpiresIn, 60)) * time.Second)
 	for time.Now().Before(deadline) {
@@ -141,10 +182,14 @@ func lapountLogin() (string, error) {
 }
 
 func cmdLogout() int {
+	if apiKey() == "" {
+		fmt.Println(dim("ログインしていません"))
+		return 0
+	}
 	if p, err := configPath(); err == nil {
 		_ = os.Remove(p)
 	}
-	fmt.Println(paint(cGreen, "✓") + " ログアウトしました(保存したAPIキーを削除)")
+	fmt.Println(paint(cGreen, "✓") + " ログアウトしました " + dim("(保存したログイン情報を削除)"))
 	return 0
 }
 
@@ -158,7 +203,7 @@ func cmdWhoami() int {
 		fmt.Fprintf(os.Stderr, "%s %v\n", paint(cRed, "✗"), err)
 		return 1
 	}
-	fmt.Printf("%s %s\n", bold(m.label()), dim("("+m.PublicUUID+")"))
+	card(cSky, "ログイン中", accountRows(m)...)
 	return 0
 }
 
@@ -181,7 +226,7 @@ func cmdAdd(urls []string) int {
 		fmt.Fprintf(os.Stderr, "%s %v\n", paint(cRed, "✗"), err)
 		return 1
 	}
-	fmt.Printf("%s 登録 %d / 既に登録済み %d / 失敗 %d\n", paint(cGreen, "✓"), r.Summary.Success, r.Summary.Duplicate, r.Summary.Error)
+	fmt.Printf("%s 登録 %s  %s 登録済み %s  %s 失敗 %s\n", paint(cGreen, "✓"), bold(fmt.Sprint(r.Summary.Success)), dim("│"), bold(fmt.Sprint(r.Summary.Duplicate)), dim("│"), bold(fmt.Sprint(r.Summary.Error)))
 	for _, e := range r.Results.Error {
 		fmt.Fprintf(os.Stderr, "  %s %s %s\n", paint(cRed, "✗"), e.URL, dim(e.Message))
 	}
@@ -215,7 +260,7 @@ func cmdRemove(args []string) int {
 		fmt.Fprintf(os.Stderr, "%s %v\n", paint(cRed, "✗"), err)
 		return 1
 	}
-	fmt.Printf("%s %d 件削除しました\n", paint(cGreen, "✓"), r.Deleted)
+	fmt.Printf("%s %s 件削除しました\n", paint(cGreen, "✓"), bold(fmt.Sprint(r.Deleted)))
 	return 0
 }
 
@@ -236,12 +281,18 @@ func cmdList() int {
 		fmt.Fprintf(os.Stderr, "%s %v\n", paint(cRed, "✗"), err)
 		return 1
 	}
+	if len(r.Records) == 0 {
+		fmt.Println(dim("記録はまだありません。 ") + paint(cSky, "ohax add <ツイートURL>") + dim(" で登録できます"))
+		return 0
+	}
+	fmt.Println(bold("自分の記録") + dim(fmt.Sprintf("  %d件", len(r.Records))))
+	fmt.Println(dim(padRight("ID", 12) + padRight("日付", 12) + "本文"))
 	for _, x := range r.Records {
 		t := []rune(strings.ReplaceAll(x.Text, "\n", " "))
-		if len(t) > 40 {
-			t = append(t[:40], '…')
+		if len(t) > 36 {
+			t = append(t[:36], '…')
 		}
-		fmt.Printf("%s  %s  %s\n", dim(x.Uniqid), x.Date, string(t))
+		fmt.Println(paint(cSky, padRight(x.Uniqid, 12)) + padRight(x.Date, 12) + string(t))
 	}
 	return 0
 }
