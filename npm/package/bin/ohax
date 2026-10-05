@@ -6,14 +6,14 @@
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 
-const pkg = `@lapius/ohatwikeeper-cli-${process.platform}-${process.arch}`;
+const pkg = `@ohatwikeeper/cli-${process.platform}-${process.arch}`;
 const exe = 'ohax' + (process.platform === 'win32' ? '.exe' : '');
 let bin;
 try {
   bin = require.resolve(`${pkg}/bin/${exe}`);
 } catch {
   console.error(`ohax: ${pkg} が見つかりません（未対応の環境か、optionalDependencies が省略されました）`);
-  console.error('  npm i -g @lapius/ohatwikeeper-cli で入れ直してください');
+  console.error('  npm i -g @ohatwikeeper/cli で入れ直してください');
   process.exit(1);
 }
 

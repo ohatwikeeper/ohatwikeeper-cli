@@ -1,5 +1,5 @@
 {
-  "name": "@lapius/ohatwikeeper-cli",
+  "name": "@ohatwikeeper/cli",
   "version": "0.0.0",
   "description": "おはツイKeeper 公式 CLI（ohax）",
   "keywords": ["cli", "ohatwikeeper", "terminal"],

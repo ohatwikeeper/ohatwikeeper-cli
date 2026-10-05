@@ -26,7 +26,7 @@ printf "%sohax%s — おはツイKeeper 公式CLI インストーラー\n\n" "$B
 case "$(uname -s)" in
   Linux) OS=linux ;;
   Darwin) OS=darwin ;;
-  *) err "未対応のOSです: $(uname -s)(Windowsは npm i -g @lapius/ohatwikeeper-cli か、GitHub Releases から ohax-win32-x64.tar.gz を取得してください)"; exit 1 ;;
+  *) err "未対応のOSです: $(uname -s)(Windowsは npm i -g @ohatwikeeper/cli か、GitHub Releases から ohax-win32-x64.tar.gz を取得してください)"; exit 1 ;;
 esac
 case "$(uname -m)" in
   x86_64|amd64) ARCH=x64 ;;
