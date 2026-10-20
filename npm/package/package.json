@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/ohatwikeeper/ohatwikeeper-cli.git"
   },
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "bin": {
     "ohax": "bin/ohax"
   },

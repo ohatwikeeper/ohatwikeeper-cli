@@ -70,8 +70,9 @@ for (const [os, cpu, goos, goarch] of targets) {
     license: main.license,
     os: [os],
     cpu: [cpu],
-    files: [`bin/${exe}`],
+    files: [`bin/${exe}`, 'LICENSE'],
   }, null, 2) + '\n');
+  cpSync(join(root, 'LICENSE'), join(dir, 'LICENSE'));
   main.optionalDependencies[name] = version;
   dirs.push(dir);
 }

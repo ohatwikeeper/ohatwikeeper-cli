@@ -1,21 +1,38 @@
-MIT License
+Copyright (c) 2026 おはツイKeeper (ohatwikeeper) / 狐ノ瀬つづり. All rights reserved.
 
-Copyright (c) 2026 Lapius7
+This repository is published as source-available. It is NOT open source.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permitted:
+  - reading the source code in this repository;
+  - using the official CLI binaries ("ohax") distributed through
+    GitHub Releases, npm (@ohatwikeeper/cli) and ohatwikeeper.com,
+    free of charge, to use おはツイKeeper;
+  - running this repository's source code without modification,
+    for your own personal use only.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Except as expressly permitted above or by GitHub's Terms of Service
+(viewing, and forking on GitHub), no other right is granted. In particular,
+you may NOT, without prior written permission from the copyright holder:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+  - modify, or create derivative works of this code or its design;
+  - copy this code, in whole or in part, into other software;
+  - redistribute, republish, repackage, or sublicense this software,
+    whether modified or not, including on other stores or registries;
+  - sell this software or offer a service based on it.
+
+Versions previously released under the MIT License remain available under
+the terms of that license. This license applies to all later versions.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+
+本リポジトリはソースを公開していますが、オープンソースではありません。
+認めるのは次の3つだけです。
+  - ソースコードを閲覧すること
+  - GitHub Releases・npm・ohatwikeeper.com で配布している公式のCLI(ohax)を、
+    おはツイKeeper を使うために無償で利用すること
+  - 改変していないソースコードを、個人の利用に限って実行すること
+GitHub 利用規約で認められる範囲(閲覧および GitHub 上のフォーク)を除き、
+著作権者の事前の書面による許可なく、改変、派生物の作成、他のソフトウェアへの
+流用、再配布(改変の有無や配布先を問わない)、販売、本ソフトウェアを使った
+サービスの提供はできません。
+以前に MIT License で公開した版には、引き続きその条件が適用されます。
